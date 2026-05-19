@@ -27,7 +27,7 @@ Release Image    --> Setup run env   --> Copy built Llama.cpp
 Rename the Dockerfile of choice to ```Dockerfile``` and then run
 
 ```
-docker build -t llamacpp-tq-base -f ./Dockerfile .
+docker build --no-cache -t llamacpp-tq-base -f ./Dockerfile .
 ```
 
 
