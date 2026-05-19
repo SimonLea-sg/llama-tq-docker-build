@@ -11,9 +11,9 @@ Build a Llama.cpp with Turbo Quant docker image.
 
 ## Image creation flow:
 
-Build Root Image --> Setup build env --> Build Llama.cpp
+Build Root Image --> Setup build env --> Build Llama.cpp (llama-server / all)
 
-Release Image --> Setup run env --> Copy built Llama.cpp 
+Release Image    --> Setup run env   --> Copy built Llama.cpp 
 
 
 ## Options (which Dockerfile to use)
@@ -38,3 +38,11 @@ Use the following at the top of your Dockerfile to use this image as the start t
 ```
 FROM llamacpp-tq-base
 ```
+
+---
+
+## llama.cpp with Turbo Quant source:
+
+Thanks to Tom Turney for making his llama.cpp build with Turbo Quant available for use by all.
+
+TheTom: [llama-cpp-turboquant](https://github.com/TheTom/llama-cpp-turboquant)
