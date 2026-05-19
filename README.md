@@ -23,11 +23,16 @@ Release Image    --> Setup run env   --> Copy built Llama.cpp
 
 
 ## Build Instructions:
+User the command below to build the image.
 
-Rename the Dockerfile of choice to ```Dockerfile``` and then run
+Suggested image names based on Docker file used (to align with my other repos).
+|      [Dockerfile]         |        [image name]           |
+| :---: | :---: |
+|  llama-all.Dockerfile     |  llamacpp-tq-mtp-base-all     |
+|  llama-server.Dockerfile  |  llamacpp-tq-mtp-base-server  |
 
 ```
-docker build --no-cache -t llamacpp-tq-mtp-base -f ./Dockerfile .
+docker build --no-cache -t [image name] -f ./[Dockerfile] .
 ```
 
 
