@@ -1,4 +1,4 @@
-# Llama Turbo Quant Docker Build
+# Llama Turbo Quant Docker Build (Cuda)
 
 
 Build a Llama.cpp with Turbo Quant docker image.
