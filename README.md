@@ -1,4 +1,4 @@
-# Llama Turbo Quant Docker Build (Cuda)
+# Llama Turbo Quant TMP Docker Build (Cuda)
 
 
 Build a Llama.cpp with Turbo Quant docker image.
@@ -11,8 +11,13 @@ Build a Llama.cpp with Turbo Quant docker image.
 
 
 ## Build Instructions:
+User the command below to build the image.
 
-Rename the Dockerfile of choice to ```Dockerfile``` and then run
+Suggested image names based on Docker file used (to align with my other repos).
+|      [Dockerfile]         |        [image name]           |
+| :---: | :---: |
+|  llama-all.Dockerfile     |  llamacpp-tq-mtp-base-all     |
+|  llama-server.Dockerfile  |  llamacpp-tq-mtp-base-server  |
 
 Build specific images with the command below. 
 
