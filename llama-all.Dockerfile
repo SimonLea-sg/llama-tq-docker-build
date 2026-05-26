@@ -46,7 +46,7 @@ RUN cmake -B build \
     -DLLAMA_BUILD_TESTS=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_EXE_LINKER_FLAGS=-Wl,--allow-shlib-undefined .&& \
-    cmake --build build --config Release -j4
+    cmake --build build --config Release -j14
 
 ## Runtime Setup
 
