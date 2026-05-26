@@ -1,4 +1,4 @@
-# Llama Turbo Quant TMP Docker Build (Cuda)
+# Llama Turbo Quant MTP Docker Build (Cuda)
 
 
 Build a Llama.cpp with Turbo Quant docker image.
