@@ -1,11 +1,7 @@
-# Llama.cpp with Turbo Quant Docker intermediant image build.
-#
-# Build specific images with: docker build --target [Stage Name] -t [Output Image Name] .
-# Stage Name = One of the names after the AS in the FROM statements.
+## Llama.cpp with Turbo Quant Docker intermediant image build.
 
-## Dev Build.
 
-FROM nvidia/cuda:12.8.1-devel-ubuntu24.04 AS Build
+FROM nvidia/cuda:12.8.1-devel-ubuntu24.04 AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
@@ -51,24 +47,21 @@ RUN cmake -B build \
     -DCMAKE_EXE_LINKER_FLAGS=-Wl,--allow-shlib-undefined . && \
     cmake --build build --config Release -j$(nproc)
 
-RUN mkdir -p /app/lib /app/full && \
-    cp build/* /app/full/ && \
-    find /app/full -name "*.so*" -exec cp -P {} /app/lib \; && \
-    cp *.py requirements.txt /app/full && \
-    cp -r conversion gguf-py requirements /app/full && \
-    cp .devops/tools.sh /app/full/tools.sh
+RUN mkdir -p /app/lib /app/full/
+RUN cp build/bin/* /app/full/
+RUN find /app/full -name "*.so*" -exec cp -P {} /app/lib/ \;
+RUN cp *.py requirements.txt /app/full/
+RUN cp -r conversion gguf-py requirements /app/full/
+RUN cp .devops/tools.sh /app/full/tools.sh
 
 
 ## Base Runtime Image
 
-FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04 as Base
+FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04 as base
 
 RUN mkdir /app
 
 COPY --from=build /app/lib/* /app
-
-RUN echo "/app" > /etc/ld.so.conf.d/llama-bin.conf \
-    && ldconfig
 
 WORKDIR /app
 
@@ -83,9 +76,9 @@ RUN apt-get update \
 
 ## Full Runtime image
 
-FROM Base AS Full
+FROM base AS full
 
-COPY --from=Build /app/full /app
+COPY --from=build /app/full /app
 
 RUN apt-get update \
     && apt-get install -y \
@@ -101,14 +94,17 @@ RUN apt-get update \
     && find /var/cache/apt/archives /var/lib/apt/lists -not -name lock -type f -delete \
     && find /var/cache -type f -delete
 
+RUN echo "/app/lib" > /etc/ld.so.conf.d/llama-bin.conf \
+    && ldconfig
+
 ENTRYPOINT ["/app/tools.sh"]
 
 
 ## CLI Runtime Image
 
-FROM Base AS Light
+FROM base AS light
 
-COPY --from=Build /app/full/llama-cli /app/full/llama-completion /app
+COPY --from=build /app/full/llama-cli /app/full/llama-completion /app/
 
 WORKDIR /app
 
@@ -116,11 +112,11 @@ ENTRYPOINT [ "/app/llama-cli" ]
 
 
 ### Server Runtime Image
-FROM Base AS Server
+FROM base AS server
 
 ENV LLAMA_ARG_HOST=0.0.0.0
 
-COPY --from=Build /app/full/llama-server /app
+COPY --from=build /app/full/llama-server /app
 
 WORKDIR /app
 
