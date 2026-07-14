@@ -7,7 +7,7 @@ Build a Llama.cpp with Turbo Quant docker image.
 - ***Build Image***: nvidia/cuda:12.8.1-devel-ubuntu24.04.
 - ***Base Image***: nvidia/cuda:12.8.1-runtime-ubuntu24.04
 - ***Release images***: nvidia/cuda:12.8.1-runtime-ubuntu24.04
-- ***LLama.cpp Src***: TheToms Llama.cpp with the TQ branch.
+- ***LLama.cpp Src***: TheToms Llama.cpp with the TQ branch [v0.3.0](https://github.com/TheTom/llama-cpp-turboquant/releases/tag/tqp-v0.3.0).
 
 
 ## Build Instructions:
