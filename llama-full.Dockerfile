@@ -1,4 +1,4 @@
-## Llama.cpp with Turbo Quant Docker intermediant image build.
+# Llama.cpp with Turbo Quant Docker intermediant image build.
 
 
 FROM nvidia/cuda:12.8.1-devel-ubuntu24.04 AS build
@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     libssl-dev \
     libgomp1 \
+    ca-certificates \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \    
     && rm -rf /var/lib/apt/lists/*
 
 ENV CC=gcc-14 CXX=g++-14 CUDAHOSTCXX=g++-14
@@ -55,7 +58,7 @@ RUN cp -r conversion gguf-py requirements /app/full/
 RUN cp .devops/tools.sh /app/full/tools.sh
 
 
-## Base Runtime Image
+### Base Runtime Image
 
 FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04 as base
 
@@ -74,7 +77,7 @@ RUN apt-get update \
     && find /var/cache -type f -delete
 
 
-## Full Runtime image
+### Full Runtime image
 
 FROM base AS full
 
@@ -86,8 +89,12 @@ RUN apt-get update \
     python3 \
     python3-pip \
     python3-wheel \
-    && pip install --break-system-packages --upgrade setuptools \
-    && pip install --break-system-packages -r requirements.txt \
+    python3-venv
+
+RUN python3 -m venv .venv \
+    && . .venv/bin/activate \
+    && python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel \
+    && pip3 install --no-cache-dir -r /app/requirements.txt \
     && apt autoremove -y \
     && apt clean -y \
     && rm -rf /tmp/* /var/tmp/* \
@@ -100,7 +107,7 @@ RUN echo "/app/lib" > /etc/ld.so.conf.d/llama-bin.conf \
 ENTRYPOINT ["/app/tools.sh"]
 
 
-## CLI Runtime Image
+### CLI Runtime Image
 
 FROM base AS light
 
